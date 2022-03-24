@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'RestApp',
+    'rest_framework.authtoken',
  
 ]
 
@@ -81,6 +82,17 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'django_rest_db2',
+#         'USER':'postgres',
+#         'HOST':'127.0.0.1',
+#         'PASSWORD':'321',
+#         'POST':'5432',
+#     }
+# }
 
 
 # Password validation

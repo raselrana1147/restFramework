@@ -11,8 +11,61 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.renderers import TemplateHTMLRenderer
+from rest_framework import generics
+from rest_framework import mixins
+from rest_framework import viewsets
+
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 
+
+
+class GenericModelArticleViewSet(viewsets.ModelViewSet):
+     queryset=Article.objects.all().order_by('-id')
+     serializer_class=ArticleSerializer
+     authentication_classes = [SessionAuthentication, BasicAuthentication, TokenAuthentication]
+     permission_classes = [IsAuthenticated]
+    
+"""
+class GenericViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,mixins.CreateModelMixin,mixins.UpdateModelMixin,
+                     mixins.DestroyModelMixin,mixins.RetrieveModelMixin):
+    queryset=Article.objects.all().order_by('-id')
+    serializer_class=ArticleSerializer
+
+  
+"""  
+
+"""
+
+class GenericsArticleApiView(generics.GenericAPIView,mixins.ListModelMixin,mixins.CreateModelMixin
+                             ,mixins.UpdateModelMixin,mixins.RetrieveModelMixin,mixins.DestroyModelMixin):
+    queryset=Article.objects.all().order_by('-id')
+    serializer_class=ArticleSerializer
+    lookup_field = 'id'
+    authentication_classes = [SessionAuthentication, BasicAuthentication, TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request, id=None):
+        
+        if id:
+            return self.retrieve(request, id)
+        else:
+           return self.list(request)
+    
+    def post(self,request):
+        return self.create(request)
+    
+    def put(self, request, id=None):
+        return self.update(request, id)
+    
+    def delete(self, request, id=None):
+        return self.destroy(request,id)
+    
+    
+"""
+
+"""
 class ArticleListView(APIView):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'article.html'
@@ -27,8 +80,9 @@ class ArticleListView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response( {'message':'Successfully added','status':status.HTTP_201_CREATED})
-
-
+        
+        
+        
 class ArticleDetailView(APIView):
     def get_objects(self,pk):
         try:
@@ -52,8 +106,8 @@ class ArticleDetailView(APIView):
     def delete(self, request,pk):
         self.get_objects(pk).delete()
         return Response({'message':'Successfully deleted',"status":status.HTTP_200_OK})
-        
-    
+"""  
+  
         
             
         
